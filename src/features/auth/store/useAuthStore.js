@@ -9,11 +9,15 @@ const useAuthStore = create(
       isAuthenticated: false,
       login: (token, user) => set({ token, user, isAuthenticated: true }),
       logout: () => set({ token: null, user: null, isAuthenticated: false }),
+      updateUser: (userData) => set((state) => ({ 
+        user: { ...state.user, ...userData } 
+      })),
     }),
     {
-      name: 'auth-storage', // name of item in the storage (must be unique)
+      name: 'auth-storage',
     }
   )
 );
 
 export default useAuthStore;
+

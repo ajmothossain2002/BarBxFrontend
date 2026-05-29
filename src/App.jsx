@@ -4,7 +4,9 @@ import { Toaster } from 'sonner';
 import LoginPage from './features/auth/pages/LoginPage';
 import RegisterPage from './features/auth/pages/RegisterPage';
 import DashboardPage from './features/auth/pages/DashboardPage';
+import AdminManagementPage from './features/auth/pages/AdminManagementPage';
 import ProtectedRoute from './common/routes/ProtectedRoute';
+import RoleBasedRoute from './common/routes/RoleBasedRoute';
 
 function App() {
   return (
@@ -22,6 +24,15 @@ function App() {
             </ProtectedRoute>
           } 
         />
+
+        <Route
+          path="/admin"
+          element={
+            <RoleBasedRoute allowedRoles={['ADMIN']}>
+              <AdminManagementPage />
+            </RoleBasedRoute>
+          }
+        />
         
         {/* Default route */}
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
@@ -32,3 +43,4 @@ function App() {
 }
 
 export default App;
+

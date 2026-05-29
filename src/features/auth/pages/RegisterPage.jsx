@@ -19,7 +19,7 @@ const RegisterPage = () => {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(registerSchema),
-    defaultValues: { fullName: '', email: '', phoneNumber: '', password: '', role: 'CUSTOMER' },
+    defaultValues: { fullName: '', email: '', phoneNumber: '', password: '', roleName: 'USER' },
   });
 
   const onSubmit = async (data) => {
@@ -80,13 +80,13 @@ const RegisterPage = () => {
             <div className="flex flex-col gap-1 w-full">
               <label className="text-sm font-medium text-slate-700">Role</label>
               <select
-                className={`input-field ${errors.role ? 'border-red-500 focus:ring-red-500' : ''}`}
-                {...register('role')}
+                className={`input-field ${errors.roleName ? 'border-red-500 focus:ring-red-500' : ''}`}
+                {...register('roleName')}
               >
-                <option value="CUSTOMER">Customer</option>
-                <option value="OWNER">Owner</option>
+                <option value="USER">Customer</option>
+                <option value="BARBER">Barber</option>
               </select>
-              {errors.role && <span className="text-xs text-red-500 mt-1">{errors.role.message}</span>}
+              {errors.roleName && <span className="text-xs text-red-500 mt-1">{errors.roleName.message}</span>}
             </div>
             
             <Button type="submit" className="w-full mt-2" isLoading={isLoading}>
@@ -107,3 +107,4 @@ const RegisterPage = () => {
 };
 
 export default RegisterPage;
+

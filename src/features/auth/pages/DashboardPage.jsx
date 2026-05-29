@@ -1,7 +1,7 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import useAuthStore from '../store/useAuthStore';
 import Button from '../../../common/components/Button';
-import { LogOut, User, Mail, ShieldAlert } from 'lucide-react';
+import { LogOut, User, Mail, ShieldAlert, Settings } from 'lucide-react';
 
 const DashboardPage = () => {
   const { user, logout } = useAuthStore();
@@ -12,14 +12,28 @@ const DashboardPage = () => {
     navigate('/login');
   };
 
+  // Support both legacy `role` (string) and new `roles` (array)
+  const primaryRole = user?.role || user?.roles?.[0] || 'N/A';
+  const isAdmin = primaryRole === 'ADMIN' || user?.roles?.includes('ADMIN');
+
   return (
     <div className="min-h-screen bg-background">
       <nav className="bg-surface border-b border-slate-200 px-6 py-4 flex items-center justify-between">
         <div className="text-xl font-bold text-slate-900 tracking-tight">BarberX ERP</div>
-        <Button variant="secondary" onClick={handleLogout} className="!py-1.5 !px-3 text-sm">
-          <LogOut className="w-4 h-4 mr-2" />
-          Logout
-        </Button>
+        <div className="flex items-center gap-3">
+          {isAdmin && (
+            <Link to="/admin">
+              <Button variant="ghost" className="!py-1.5 !px-3 text-sm">
+                <Settings className="w-4 h-4 mr-2" />
+                Admin Console
+              </Button>
+            </Link>
+          )}
+          <Button variant="secondary" onClick={handleLogout} className="!py-1.5 !px-3 text-sm">
+            <LogOut className="w-4 h-4 mr-2" />
+            Logout
+          </Button>
+        </div>
       </nav>
 
       <main className="max-w-7xl mx-auto px-6 py-8">
@@ -52,7 +66,7 @@ const DashboardPage = () => {
             </div>
             <div>
               <p className="text-sm font-medium text-slate-500">Access Role</p>
-              <p className="text-lg font-semibold text-slate-900 capitalize">{user?.role?.toLowerCase() || 'N/A'}</p>
+              <p className="text-lg font-semibold text-slate-900 capitalize">{primaryRole?.toLowerCase()}</p>
             </div>
           </div>
         </div>
@@ -62,3 +76,4 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
+

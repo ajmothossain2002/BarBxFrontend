@@ -31,10 +31,13 @@ const LoginPage = () => {
     setIsLoading(true);
     try {
       const response = await authApi.login(data);
-      // Assuming response structure matching backend: { data: { token: '...', user: {...} }, message: '...' }
-      // Or just a flat token/user if standard. Let's assume standard { token, user } or we extract it.
-      const token = response.token || response.data?.token;
-      const user = response.user || response.data?.user || { email: data.email };
+      // Backend wraps in ApiResponse: { success, message, data: { accessToken, tokenType, user } }
+      const authData = response.data;
+      const token = authData.accessToken;
+      const user = {
+        ...authData.user,
+        role: authData.user?.roles?.[0] || 'USER',
+      };
       
       login(token, user);
       toast.success('Login successful!');
